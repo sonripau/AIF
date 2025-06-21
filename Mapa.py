@@ -1,4 +1,4 @@
-from navegacion import Navegacion
+from Navegation import Navegacion
 import random
 
 class TerrenoExplorable:
