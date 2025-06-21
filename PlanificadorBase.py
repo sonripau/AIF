@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from Reportero import InformeBusqueda
+
 from Navegation import Navegacion
+from Reportero import InformeBusqueda
+
 
 class PlanificadorRuta(ABC):
     def __init__(self, terreno, verbose=False):
@@ -17,15 +19,22 @@ class PlanificadorRuta(ABC):
 
     def es_objetivo(self, nodo):
         if self.terreno.orientacion_meta != "I":
-            return nodo.posicion == self.terreno.meta and nodo.orientacion == self.terreno.orientacion_meta
+            return (
+                nodo.posicion == self.terreno.meta
+                and nodo.orientacion == self.terreno.orientacion_meta
+            )
         return nodo.posicion == self.terreno.meta
 
     def movimientos_posibles(self, nodo):
         pos, ori = nodo.posicion, nodo.orientacion
-        idx = Navegacion.DIRECCIONES.index(ori)
+        if isinstance(ori, int):
+            idx = ori
+            ori = Navegacion.MAPEO_ENTERO_A_DIRECCION[ori]
+        else:
+            idx = Navegacion.DIRECCIONES.index(ori)
         movimientos = [
             (pos, Navegacion.DIRECCIONES[(idx + 1) % 8], 1, "Giro der."),
-            (pos, Navegacion.DIRECCIONES[(idx - 1) % 8], 1, "Giro izq.")
+            (pos, Navegacion.DIRECCIONES[(idx - 1) % 8], 1, "Giro izq."),
         ]
         dx, dy = Navegacion.MOVIMIENTOS[ori]
         nueva_pos = (pos[0] + dx, pos[1] + dy)
