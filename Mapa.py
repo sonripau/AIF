@@ -1,5 +1,6 @@
 from Navegation import Navegacion
 import random
+import numpy as np
 
 class TerrenoExplorable:
     """
@@ -73,21 +74,25 @@ class TerrenoExplorable:
 
     @staticmethod
     def generar_aleatorio(n, seed=None):
+        """
+        Genera un mapa de tamaño n x n con números random de 1 al 10.
+        La posición de inicio será (0, 0) y la meta (n-1, n-1).
+        La orientación inicial será '0', y la final será irrelevante ('8').
+        """
         if seed is not None:
-            #random.seed(seed)
-            random.seed(int(seed))  # Convierte a int siempre que no sea None
+            random.seed(int(seed))
 
-        grilla = [[0 for _ in range(n)] for _ in range(n)]
+        grilla = np.random.randint(1, 10, size=(n, n)).tolist()
 
-        # Colocar obstáculos aleatorios (opcional, puedes ajustar el %)
-        for i in range(n):
-            for j in range(n):
-                if (i, j) not in [(0, 0), (n - 1, n - 1)] and random.random() < 0.2:
-                    grilla[i][j] = 1  # obstáculo
+        punto_inicio = (0, 0)
+        punto_meta = (n - 1, n - 1)
+        ori_inicio = 0
+        ori_meta = 8  
 
         return TerrenoExplorable(
-            grilla=grilla,
-            inicio=(0, 0),
-            meta=(n - 1, n - 1),
-            orientacion_inicio='N'
+            matriz=grilla,
+            punto_inicio=punto_inicio,
+            ori_inicio=ori_inicio,
+            punto_meta=punto_meta,
+            ori_meta=ori_meta
         )
