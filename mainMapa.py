@@ -1,4 +1,5 @@
 from Mapa import TerrenoExplorable
+from Mapa import mostrar_mapa_y_posiciones
 
 """
 #Prueba mapa desde archivo
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     main()
 """
 
-#"""
+"""
 #Prueba mapa Generado Aleatoriamente
 from Mapa import TerrenoExplorable
 
@@ -31,3 +32,37 @@ def main():
 if __name__ == "__main__":
     main()
 #"""
+
+#Iterativo para que el usuario elija una opción o la otra
+def main():
+    print("¿Which type of map do you want to use?")
+    print("1. Load map from file")
+    print("2. Generate a random map nxn")
+    opcion = input("Choose an option (1 o 2): ")
+
+    if opcion == "1":
+        ruta = input("Enter the name of the file (default: exampleMap.txt): ")
+        if not ruta.strip():
+            ruta = "exampleMap.txt"
+        terreno = TerrenoExplorable.cargar_desde_archivo(ruta)
+    elif opcion == "2":
+        tam = input("Size of the map (ex. 5): ")
+        seed = input("Seed for randomness (optional): ")
+        tam = int(tam)
+        seed = int(seed) if seed.strip() else None
+        terreno = TerrenoExplorable.generar_aleatorio(tam, seed=seed)
+    else:
+        print("Option no valid.")
+        return
+
+    print("\n==== Map Loaded ====")
+    for fila in terreno.grilla:
+        print(' '.join(str(c) for c in fila))
+
+    print("\nInicio:", terreno.inicio, "Orientation:", terreno.orientacion_inicio)
+    print("Meta  :", terreno.meta, "Orientation:", terreno.orientacion_meta)
+
+    mostrar_mapa_y_posiciones(terreno)
+
+if __name__ == "__main__":
+    main()

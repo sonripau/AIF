@@ -96,3 +96,26 @@ class TerrenoExplorable:
             punto_meta=punto_meta,
             ori_meta=ori_meta
         )
+
+def mostrar_mapa_y_posiciones(terreno):
+    print("\n===== Map Loaded =====")
+    for fila in terreno._grilla:
+        print(' '.join(str(c) for c in fila))
+
+    filas, columnas = terreno.dimensiones
+    print("\n===== Dimensions Map =====")
+    print(f"Rows: {filas}, Columns: {columnas}")
+
+    print("\n===== Positions =====")
+    print("Start:", terreno._inicio, "Orientation:", terreno._ori_inicio)
+    print("Goal:", terreno._meta, "Orientation:", terreno._ori_meta)
+
+    mapa_vista = [fila.copy() for fila in terreno._grilla]
+    x0, y0 = terreno._inicio
+    xf, yf = terreno._meta
+    mapa_vista[x0][y0] = 'S'
+    mapa_vista[xf][yf] = 'G'
+
+    print("\n===== Map with S and G =====")
+    for fila in mapa_vista:
+        print(' '.join(str(c) for c in fila))
