@@ -1,6 +1,9 @@
-from Navegation import Navegacion
 import random
+
 import numpy as np
+
+from Navegation import Navegacion
+
 
 class TerrenoExplorable:
     """
@@ -9,11 +12,11 @@ class TerrenoExplorable:
     """
 
     def __init__(self, matriz, punto_inicio, ori_inicio, punto_meta, ori_meta):
-        self._grilla = matriz                    # Matriz de costes del terreno
-        self._inicio = punto_inicio              # Coordenadas iniciales (x, y)
-        self._ori_inicio = ori_inicio            # Orientación inicial
-        self._meta = punto_meta                  # Coordenadas goal (x, y)
-        self._ori_meta = ori_meta                # Orientación goal
+        self._grilla = matriz  # Matriz de costes del terreno
+        self._inicio = punto_inicio  # Coordenadas iniciales (x, y)
+        self._ori_inicio = ori_inicio  # Orientación inicial
+        self._meta = punto_meta  # Coordenadas goal (x, y)
+        self._ori_meta = ori_meta  # Orientación goal
 
     @property
     def dimensiones(self):
@@ -59,18 +62,19 @@ class TerrenoExplorable:
         - Penúltima línea: posición inicial + orientación (como número)
         - Última línea: posición objetivo + orientación (como número)
         """
-        with open(ruta, 'r') as archivo:
+        with open(ruta, "r") as archivo:
             datos = [list(map(int, linea.strip().split())) for linea in archivo]
 
-        filas, columnas = datos[0]              # Dimensiones del terreno
-        grilla = datos[1:-2]                    # Matriz del terreno
-        ini = tuple(datos[-2][:2])              # Coordenadas inicio
-        ori_ini = Navegacion.MAPEO_ENTERO_A_DIRECCION[datos[-2][2]]  # Orientación inicio
-        fin = tuple(datos[-1][:2])              # Coordenadas meta
+        filas, columnas = datos[0]  # Dimensiones del terreno
+        grilla = datos[1:-2]  # Matriz del terreno
+        ini = tuple(datos[-2][:2])  # Coordenadas inicio
+        ori_ini = Navegacion.MAPEO_ENTERO_A_DIRECCION[
+            datos[-2][2]
+        ]  # Orientación inicio
+        fin = tuple(datos[-1][:2])  # Coordenadas meta
         ori_fin = Navegacion.MAPEO_ENTERO_A_DIRECCION[datos[-1][2]]  # Orientación meta
 
         return cls(grilla, ini, ori_ini, fin, ori_fin)
-
 
     @staticmethod
     def generar_aleatorio(n, seed=None):
@@ -82,25 +86,26 @@ class TerrenoExplorable:
         if seed is not None:
             random.seed(int(seed))
 
-        grilla = np.random.randint(1, 10, size=(n, n)).tolist()
+        grilla = np.random.randint(1, 7, size=(n, n)).tolist()
 
         punto_inicio = (0, 0)
         punto_meta = (n - 1, n - 1)
-        ori_inicio = 0
-        ori_meta = 8  
+        ori_inicio = Navegacion.MAPEO_ENTERO_A_DIRECCION[0]
+        ori_meta = Navegacion.MAPEO_ENTERO_A_DIRECCION[8]
 
         return TerrenoExplorable(
             matriz=grilla,
             punto_inicio=punto_inicio,
             ori_inicio=ori_inicio,
             punto_meta=punto_meta,
-            ori_meta=ori_meta
+            ori_meta=ori_meta,
         )
+
 
 def mostrar_mapa_y_posiciones(terreno):
     print("\n===== Map Loaded =====")
     for fila in terreno._grilla:
-        print(' '.join(str(c) for c in fila))
+        print(" ".join(str(c) for c in fila))
 
     filas, columnas = terreno.dimensiones
     print("\n===== Dimensions Map =====")
@@ -113,9 +118,9 @@ def mostrar_mapa_y_posiciones(terreno):
     mapa_vista = [fila.copy() for fila in terreno._grilla]
     x0, y0 = terreno._inicio
     xf, yf = terreno._meta
-    mapa_vista[x0][y0] = 'S'
-    mapa_vista[xf][yf] = 'G'
+    mapa_vista[x0][y0] = "S"
+    mapa_vista[xf][yf] = "G"
 
     print("\n===== Map with S and G =====")
     for fila in mapa_vista:
-        print(' '.join(str(c) for c in fila))
+        print(" ".join(str(c) for c in fila))

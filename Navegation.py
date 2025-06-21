@@ -6,28 +6,34 @@ class Navegacion:
     """
 
     # Lista de direcciones principales (en sentido horario)
-    DIRECCIONES = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    DIRECCIONES = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "--"]
 
     # Direcciones incluyendo la opción de quedarse quieto ("I" de Idle)
     CON_IDLE = DIRECCIONES + ["I"]
 
     # Vectores de desplazamiento asociados a cada dirección
     MOVIMIENTOS = {
-        "N": (-1, 0),   # Arriba
+        "N": (-1, 0),  # Arriba
         "NE": (-1, 1),  # Arriba-derecha
-        "E": (0, 1),    # Derecha
-        "SE": (1, 1),   # Abajo-derecha
-        "S": (1, 0),    # Abajo
+        "E": (0, 1),  # Derecha
+        "SE": (1, 1),  # Abajo-derecha
+        "S": (1, 0),  # Abajo
         "SW": (1, -1),  # Abajo-izquierda
-        "W": (0, -1),   # Izquierda
-        "NW": (-1, -1)  # Arriba-izquierda
+        "W": (0, -1),  # Izquierda
+        "NW": (-1, -1),  # Arriba-izquierda
     }
 
     # Mapeo de números enteros a direcciones, útil al leer desde archivo
     MAPEO_ENTERO_A_DIRECCION = {
-        0: "N", 1: "NE", 2: "E", 3: "SE",
-        4: "S", 5: "SW", 6: "W", 7: "NW",
-        8: "I"  # Idle
+        0: "N",
+        1: "NE",
+        2: "E",
+        3: "SE",
+        4: "S",
+        5: "SW",
+        6: "W",
+        7: "NW",
+        8: "I",  # Idle
     }
 
     @staticmethod
@@ -45,4 +51,3 @@ class Navegacion:
 # Variables de acceso rápido para otros módulos
 DIRECTIONS = Navegacion.DIRECCIONES
 MOVES = Navegacion.MOVIMIENTOS
-

@@ -1,12 +1,15 @@
-import os
 import csv
+import os
+import random
+
 import numpy as np
-from Mapa import TerrenoExplorable
+
+from AStarSearch import BusquedaAEstrella
 from BreadthFirstSearch import BusquedaAnchura
 from DepthFirstSearch import BusquedaProfundidad
-from AStarSearch import BusquedaAEstrella
 from Heuristicas import heuristica_euclidea
-import random
+from Mapa import TerrenoExplorable
+
 """
 output_dir = "resultados_busqueda"
 os.makedirs(output_dir, exist_ok=True)
@@ -82,12 +85,13 @@ def ejecutar_experimentos():
 if __name__ == "__main__":
     ejecutar_experimentos()
 """
-from Mapa import TerrenoExplorable
+from AStarSearch import BusquedaAEstrella
 from BreadthFirstSearch import BusquedaAnchura
 from DepthFirstSearch import BusquedaProfundidad
-from AStarSearch import BusquedaAEstrella  
 from Heuristicas import heuristica_euclidea
+from Mapa import TerrenoExplorable
 from Metricas import MetricasBusqueda
+
 
 def seleccionar_algoritmo(nombre, terreno):
     if nombre == "bfs":
@@ -95,9 +99,14 @@ def seleccionar_algoritmo(nombre, terreno):
     elif nombre == "dfs":
         return BusquedaProfundidad(terreno, verbose=False)
     elif nombre == "a*":
-        return BusquedaAEstrella(terreno, heuristica=lambda p: heuristica_euclidea(p, terreno.meta), verbose=False)
+        return BusquedaAEstrella(
+            terreno,
+            heuristica=lambda p: heuristica_euclidea(p, terreno.meta),
+            verbose=False,
+        )
     else:
         raise ValueError(f"Algoritmo no válido: {nombre}")
+
 
 def ejecutar_experimentos():
     tamanos = [3, 5, 7, 9]
@@ -123,10 +132,13 @@ def ejecutar_experimentos():
                 else:
                     d = g = E = F = None
 
-                metricas.registrar(tamaño=tam, repetición=rep, algoritmo=nombre_alg, E=E, F=F, d=d, g=g)
+                metricas.registrar(
+                    tamaño=tam, repetición=rep, algoritmo=nombre_alg, E=E, F=F, d=d, g=g
+                )
 
     print("\n===== Resultados Promedio =====")
-    metricas.mostrar_resultados(promediar=True)
+    metricas.mostrar_resultados()
+
 
 if __name__ == "__main__":
     ejecutar_experimentos()
