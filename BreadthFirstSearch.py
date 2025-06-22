@@ -27,17 +27,15 @@ class BusquedaAnchura(PlanificadorRuta):
         while pila:
             actual = pila.popleft()  # Tomar el nodo más antiguo
 
-            # <<< CAMBIO: usar lista de nodos examinados del reportero
+            # usa lista de nodos examinados del reportero
             self.reportero.examinados.append(actual)
 
-            # <<< CAMBIO: registrar nodo con verbose si corresponde
+            # registrar nodo con verbose si corresponde
             self.reportero.registrar_nodo(actual)
 
             # Comprobación de objetivo
             if self.es_objetivo(actual):
-                # <<< CAMBIO: mostrar también métricas
-                #return self.reportero.mostrar_ruta(actual, mostrar_heuristica=True)
-
+                # mostrar métricas
                 d, g = self.reportero.mostrar_ruta(actual, mostrar_heuristica=True)
 
                 # Se añade E y F antes del return
@@ -60,7 +58,7 @@ class BusquedaAnchura(PlanificadorRuta):
                     pila.append(nuevo)
                     explorados.add(clave)
 
-                    # <<< CAMBIO: usar lista de frontera del reportero
+                    # usa lista de frontera del reportero
                     self.reportero.en_frontera.append(nuevo)
                     
         # Si no se encuentra solución        

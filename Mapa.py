@@ -101,6 +101,22 @@ class TerrenoExplorable:
             ori_meta=ori_meta,
         )
 
+    def guardar_en_archivo(self, ruta):
+        """
+        Guarda el mapa actual en un archivo con el mismo formato usado por cargar_desde_archivo().
+        """
+        with open(ruta, 'w') as archivo:
+            filas, columnas = self.dimensiones
+            archivo.write(f"{filas} {columnas}\n")
+
+            for fila in self._grilla:
+                archivo.write(" ".join(map(str, fila)) + "\n")
+
+            ori_ini = Navegacion.MAPEO_DIRECCION_A_ENTERO[self._ori_inicio]
+            ori_fin = Navegacion.MAPEO_DIRECCION_A_ENTERO.get(self._ori_meta, 8)  # 8 = Irrelevante
+
+            archivo.write(f"{self._inicio[0]} {self._inicio[1]} {ori_ini}\n")
+            archivo.write(f"{self._meta[0]} {self._meta[1]} {ori_fin}\n")
 
 def mostrar_mapa_y_posiciones(terreno):
     print("\n===== Map Loaded =====")

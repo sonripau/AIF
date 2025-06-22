@@ -33,12 +33,10 @@ class BusquedaAEstrella(PlanificadorRuta):
 
         while pila:
             _, _, actual = heapq.heappop(pila)
-            #self.examinados.append(actual)
             self.reportero.examinados.append(actual)
             self.reportero.registrar_nodo(actual)
 
             if self.es_objetivo(actual):
-                #return self.reportero.mostrar_ruta(actual, mostrar_heuristica=True)
                 d, g = self.reportero.mostrar_ruta(actual, mostrar_heuristica=True)
 
                 # Se añade E y F antes del return
@@ -64,8 +62,7 @@ class BusquedaAEstrella(PlanificadorRuta):
                     )
                     contador += 1
                     heapq.heappush(pila, (nuevo.coste + heur, contador, nuevo))
-                    #self.frontera.append(nuevo)
                     self.reportero.en_frontera.append(nuevo)
 
-        print("No se encontró un camino hacia la meta.")
+        print("The path to the goal was not found.")
         return None, None

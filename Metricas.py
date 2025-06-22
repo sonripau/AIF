@@ -34,10 +34,9 @@ class MetricasBusqueda:
         """Imprime los promedios por tamaño y algoritmo."""
         promedios = self.promedios()
         for tamaño, algoritmos in promedios.items():
-            print(f"\nTamaño de mapa: {tamaño}")
+            print(f"\n Size of the map: {tamaño}")
             for algoritmo, (E, F, d, g) in algoritmos.items():
-                print(f"  Algoritmo: {algoritmo} → E: {E:.2f}, F: {F:.2f}, d: {d:.2f}, g: {g:.2f}")
-
+                print(f"  Algorithm: {algoritmo} → d: {d:.2f}, g: {g:.2f}, #E: {E:.2f}, #F: {F:.2f}")
 
 def timed(func):
     @wraps(func)

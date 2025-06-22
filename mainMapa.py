@@ -2,6 +2,12 @@ from Mapa import TerrenoExplorable
 from Mapa import mostrar_mapa_y_posiciones
 
 """
+This script allows the user to either load a map from file or generate a random map.
+It then displays the map along with the initial and goal positions. 
+Useful for visual inspection and setup before running search algorithms.
+"""
+
+"""
 #Prueba mapa desde archivo
 def main():
     terreno = TerrenoExplorable.cargar_desde_archivo("exampleMap.txt")
@@ -33,7 +39,7 @@ if __name__ == "__main__":
     main()
 #"""
 
-#Iterativo para que el usuario elija una opción o la otra
+# Interactive menu for the user to choose between loading a map or generating a random one
 def main():
     print("¿Which type of map do you want to use?")
     print("1. Load map from file")
@@ -54,13 +60,6 @@ def main():
     else:
         print("Option no valid.")
         return
-
-    print("\n==== Map Loaded ====")
-    for fila in terreno.grilla:
-        print(' '.join(str(c) for c in fila))
-
-    print("\nInicio:", terreno.inicio, "Orientation:", terreno.orientacion_inicio)
-    print("Meta  :", terreno.meta, "Orientation:", terreno.orientacion_meta)
 
     mostrar_mapa_y_posiciones(terreno)
 

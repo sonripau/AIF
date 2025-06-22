@@ -1,7 +1,7 @@
 import csv
 import os
 import random
-
+import pandas as pd
 import numpy as np
 
 from AStarSearch import BusquedaAEstrella
@@ -9,89 +9,12 @@ from BreadthFirstSearch import BusquedaAnchura
 from DepthFirstSearch import BusquedaProfundidad
 from Heuristicas import heuristica_euclidea
 from Mapa import TerrenoExplorable
-
-"""
-output_dir = "resultados_busqueda"
-os.makedirs(output_dir, exist_ok=True)
-
-algoritmos = {
-    "bfs": lambda terreno: BusquedaAnchura(terreno, verbose=False),
-    "dfs": lambda terreno: BusquedaProfundidad(terreno, verbose=False),
-    "a*": lambda terreno: BusquedaAEstrella(terreno, heuristica=lambda p: heuristica_euclidea(p, terreno.meta), verbose=False)
-}
-
-tamaños = [3, 5, 7, 9]
-repeticiones = 10
-semillas = np.random.randint(0, 10000, size=repeticiones)
-
-
-def resolver_mapa(n, algoritmo, seed):
-    terreno = TerrenoExplorable.generar_aleatorio(n, seed=seed)
-    planificador = algoritmos[algoritmo](terreno)
-    resultado = planificador.ejecutar()
-
-    if resultado is None:
-        return None  # No se encontró solución
-
-    if isinstance(resultado, tuple) and len(resultado) == 4:
-        d, g, E, F = resultado
-    elif isinstance(resultado, tuple) and len(resultado) == 2:
-        d, g = resultado
-        E = len(planificador.examinados)
-        F = len(planificador.frontera)
-    else:
-        return None
-
-    return d, g, E, F
-
-
-def ejecutar_experimentos():
-    for n in tamaños:
-        resultados_prom = []
-
-        for nombre_alg in algoritmos:
-            d_vals, g_vals, E_vals, F_vals = [], [], [], []
-
-            for seed in semillas:
-                resultado = resolver_mapa(n, nombre_alg, seed)
-                if resultado:
-                    d, g, E, F = resultado
-                    d_vals.append(d)
-                    g_vals.append(g)
-                    E_vals.append(E)
-                    F_vals.append(F)
-
-            # Promedios
-            if d_vals:  # Verifica que haya soluciones
-                promedio = {
-                    "algorithm": nombre_alg,
-                    "d": round(sum(d_vals)/len(d_vals), 2),
-                    "g": round(sum(g_vals)/len(g_vals), 2),
-                    "#E": round(sum(E_vals)/len(E_vals), 2),
-                    "#F": round(sum(F_vals)/len(F_vals), 2),
-                }
-                resultados_prom.append(promedio)
-
-        # Guardar CSV
-        ruta_csv = os.path.join(output_dir, f"{n}x{n}_resultados.csv")
-        with open(ruta_csv, mode="w", newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=["algorithm", "d", "g", "#E", "#F"])
-            writer.writeheader()
-            writer.writerows(resultados_prom)
-
-        print(f"Resultados guardados en: {ruta_csv}")
-
-
-if __name__ == "__main__":
-    ejecutar_experimentos()
-"""
-from AStarSearch import BusquedaAEstrella
-from BreadthFirstSearch import BusquedaAnchura
-from DepthFirstSearch import BusquedaProfundidad
-from Heuristicas import heuristica_euclidea
-from Mapa import TerrenoExplorable
 from Metricas import MetricasBusqueda
 
+# This script runs a batch of search experiments (BFS, DFS, A*) on randomly generated maps 
+# of various sizes (3x3, 5x5, 7x7, 9x9). For each configuration, it executes 10 repetitions 
+# and records performance metrics such as number of expanded nodes (E), final frontier size (F), 
+# path depth (d), and total cost (g). Results are saved to a CSV file for further analysis.
 
 def seleccionar_algoritmo(nombre, terreno):
     if nombre == "bfs":
@@ -114,10 +37,15 @@ def ejecutar_experimentos():
     repeticiones = 10
 
     metricas = MetricasBusqueda()
+    resultados_lista = []
 
     for tam in tamanos:
         for rep in range(repeticiones):
             terreno = TerrenoExplorable.generar_aleatorio(tam, seed=rep)
+
+      # Guardar el mapa
+            os.makedirs("mapas_generados", exist_ok=True)
+            terreno.guardar_en_archivo(f"mapas_generados/mapa_{tam}x{tam}_rep{rep}.txt")
 
             for nombre_alg in algoritmos:
                 planificador = seleccionar_algoritmo(nombre_alg, terreno)
@@ -135,9 +63,21 @@ def ejecutar_experimentos():
                 metricas.registrar(
                     tamaño=tam, repetición=rep, algoritmo=nombre_alg, E=E, F=F, d=d, g=g
                 )
+                resultados_lista.append({
+                    "map_size": tam,
+                    "repetition": rep,
+                    "algorithm": nombre_alg,
+                    "E": E,
+                    "F": F,
+                    "d": d,
+                    "g": g
+                })
 
-    print("\n===== Resultados Promedio =====")
+    print("\n===== Average Results =====")
     metricas.mostrar_resultados()
+    # Guardar resultados a CSV
+    df = pd.DataFrame(resultados_lista)
+    df.to_csv("resultados_busqueda.csv", index=False)
 
 
 if __name__ == "__main__":

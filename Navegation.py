@@ -35,6 +35,8 @@ class Navegacion:
         7: "NW",
         8: "I",  # Idle
     }
+    
+    MAPEO_DIRECCION_A_ENTERO = {v: k for k, v in MAPEO_ENTERO_A_DIRECCION.items()}
 
     @staticmethod
     def avanzar(orientacion, desde):
